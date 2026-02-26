@@ -9,7 +9,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 g = Github(GITHUB_TOKEN)
 
 def get_repo_contents(repo_url: str):
-  repo_name = repo_url.removeprefix("https://github.com/","")
+  repo_name = repo_url.removeprefix("https://github.com/")
   repo = g.get_repo(repo_name)
   contents = repo.get_contents("")
 
