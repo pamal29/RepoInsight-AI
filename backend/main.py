@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from github.fetcher import get_repo_contents
-from utils.file_filter import filter_files
-from analyzers.language_detector import detect_language
+from backend.github.fetcher import get_repo_contents
+from backend.utils.file_filter import filter_files
+from backend.analyzers.language_detector import detect_language
 
 app = FastAPI()
 
@@ -20,4 +20,7 @@ def analyze_repo(repo_url: str):
     "language_info": language_info
   }
 
-  
+
+# uvicorn main:app --reload
+
+
