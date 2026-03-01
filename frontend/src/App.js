@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import LanguageChart from "./LanguageChart";
 
 function App() {
   const [repoUrl, setRepoUrl] = useState("");
@@ -20,7 +21,6 @@ function App() {
 
       setData(response.data);
     } catch (error) {
-      console.error(error);
       alert("Error analyzing repository");
     }
 
@@ -28,39 +28,49 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>RepoInsight AI Dashboard</h1>
+    <div className="min-h-screen bg-gray-100 p-10">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-3xl font-bold mb-6 text-center">
+          🚀 RepoInsight AI Dashboard
+        </h1>
 
-      <input
-        type="text"
-        placeholder="Enter GitHub repo URL"
-        value={repoUrl}
-        onChange={(e) => setRepoUrl(e.target.value)}
-        style={{ width: "400px", padding: "10px" }}
-      />
-
-      <button onClick={analyzeRepo} style={{ padding: "10px 20px", marginLeft: "10px" }}>
-        Analyze
-      </button>
-
-      {loading && <p>Analyzing...</p>}
-
-      {data && (
-        <div style={{ marginTop: "30px" }}>
-          <h2>Results</h2>
-
-          <p><strong>Total Files:</strong> {data.total_files}</p>
-
-          <p><strong>Languages:</strong></p>
-          <pre>{JSON.stringify(data.language_info, null, 2)}</pre>
-
-          <p><strong>Frameworks:</strong> {data.frameworks.join(", ")}</p>
-
-          <p><strong>Architecture:</strong> {data.architecture}</p>
-
-          <p><strong>Complexity Score:</strong> {data.complexity.complexity_score}</p>
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Enter GitHub repo URL"
+            value={repoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+            className="flex-1 p-3 border rounded-lg"
+          />
+          <button
+            onClick={analyzeRepo}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+          >
+            Analyze
+          </button>
         </div>
-      )}
+
+        {loading && <p className="mt-4 text-blue-500">Analyzing...</p>}
+
+        {data && (
+          <div className="mt-8 space-y-6">
+            <div className="bg-gray-50 p-4 rounded-lg shadow">
+              <h2 className="font-semibold text-xl mb-2">Project Overview</h2>
+              <p><strong>Total Files:</strong> {data.total_files}</p>
+              <p><strong>Architecture:</strong> {data.architecture}</p>
+              <p><strong>Frameworks:</strong> {data.frameworks.join(", ")}</p>
+              <p><strong>Complexity Score:</strong> {data.complexity.complexity_score}</p>
+            </div>
+
+            <LanguageChart languageData={data.language_info} />
+
+            <div className="bg-gray-50 p-4 rounded-lg shadow">
+              <h2 className="font-semibold text-xl mb-2">AI Summary</h2>
+              <p>{data.ai_summary}</p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
