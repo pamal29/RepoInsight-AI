@@ -5,9 +5,18 @@ from backend.analyzers.language_detector import detect_language
 from backend.analyzers.framework_detector import detect_frameworks
 from backend.analyzers.complexity_analyzer import calculate_complexity
 from backend.analyzers.architecture_detector import detect_architecture
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+  
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
