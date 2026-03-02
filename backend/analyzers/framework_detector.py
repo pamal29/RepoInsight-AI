@@ -26,4 +26,4 @@ def detect_framework(file_path):
             framework.append("Spring")
 
     
-return list(set(framework))
+  return list(set(framework))
