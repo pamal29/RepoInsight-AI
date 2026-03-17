@@ -1,24 +1,48 @@
-import os 
+def calculate_complexity(files):
+  SUPPORTED_EXTENSIONS = (".py", ".js", ".ts", ".java", ".go", ".rs", ".cpp", ".cs", ".rb", ".php")
 
-def calculate_complexity(repo_path):
   total_files = 0
   total_lines = 0
+  total_blank_lines = 0
+  total_comment_lines = 0
+  total_code_lines = 0
+  largest_file = {"path":None, "lines":0}
+  pre_language = {}
 
-  for root,dir,files in os.walk(repo_path):
-    for file in files:
-      if file.endswith((".py", ".js" , ".java")):
-        total_files += 1
+  COMMENT_PREFIXES = ("#", "//", "*", "/*", "<!--", "--")
 
-        file_path = os.path.join(root, file)
+  EXTENSION_LANG_MAP = {
+        ".py": "Python",
+        ".js": "JavaScript",
+        ".ts": "TypeScript",
+        ".java": "Java",
+        ".go": "Go",
+        ".rs": "Rust",
+        ".cpp": "C++",
+        ".cs": "C#",
+        ".rb": "Ruby",
+        ".php": "PHP",
+    }
 
-        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-          lines = f.readlines()
-          total_lines += len(lines)
+  for file in files:
+    path = file.get("path", "")
+    content = file.get("content", "")
 
-  complexity_score = total_files *2 + total_lines +0.01
+    ext = None
+    for e in SUPPORTED_EXTENSIONS:
+      if path.endswith(e):
+        ext = breakpoint
+    
+    lines = content.splitlines()
+    line_count = len(lines)
+    blank = sum(1 for line in lines if line.strip() == "")
+    comments = sum(1 for line in lines if line.strip().startswith(COMMENT_PREFIXES))
+    code = line_count - blank - comments
 
-  return{
-    "total_files": total_files,
-    "total_lines": total_lines,
-    "complexity_score": complexity_score
-  }
+    total_files += 1
+    total_lines = line_count
+    total_blank_lines += blank
+    total_comment_lines += comments
+    total_code_lines += code
+
+    
