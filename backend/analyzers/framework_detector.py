@@ -1,29 +1,71 @@
-import os
+def detect_framework(files):
+    FRAMEWORK_SIGNATURES = {
+        "requirements.txt": {
+            "fastapi":      "FastAPI",
+            "flask":        "Flask",
+            "django":       "Django",
+            "tornado":      "Tornado",
+            "aiohttp":      "aiohttp",
+            "tensorflow":   "TensorFlow",
+            "torch":        "PyTorch",
+            "scikit-learn": "Scikit-learn",
+            "langchain":    "LangChain",
+            "openai":       "OpenAI SDK",
+            "sqlalchemy":   "SQLAlchemy",
+            "celery":       "Celery",
+            "pytest":       "Pytest",
+        },
+        "package.json": {
+            "react":        "React",
+            "next":         "Next.js",
+            "vue":          "Vue.js",
+            "nuxt":         "Nuxt.js",
+            "svelte":       "Svelte",
+            "express":      "Express.js",
+            "fastify":      "Fastify",
+            "nestjs":       "NestJS",
+            "gatsby":       "Gatsby",
+            "tailwindcss":  "Tailwind CSS",
+            "typescript":   "TypeScript",
+            "jest":         "Jest",
+            "vite":         "Vite",
+            "webpack":      "Webpack",
+        },
+        "pom.xml": {
+            "spring-boot":  "Spring Boot",
+            "spring":       "Spring",
+            "hibernate":    "Hibernate",
+            "junit":        "JUnit",
+        },
+        "build.gradle": {
+            "spring-boot":  "Spring Boot",
+            "spring":       "Spring",
+            "hibernate":    "Hibernate",
+        },
+        "go.mod": {
+            "gin-gonic":    "Gin",
+            "echo":         "Echo",
+            "fiber":        "Fiber",
+        },
+        "cargo.toml": {
+            "actix":        "Actix",
+            "rocket":       "Rocket",
+            "axum":         "Axum",
+        },
+        "gemfile": {
+            "rails":        "Ruby on Rails",
+            "sinatra":      "Sinatra",
+        },
+    }
+    detected = set()
 
-def detect_framework(file_path):
-  framework = []
-
-  for root, dirs, files in os.walk(file_path):
     for file in files:
-      file_path = os.path.join(root, file)
+      filename = file.get("path", "").split("/")[-1].lower()
+      content = file.get("content", "").lower()
 
-      if file == "requirements.txt":
-        with open(file_path, "r", encoding="utf-8") as f:
-          content = f.read().lower()
-          if "flask" in content:
-            framework.append("Flask")
+      if filename in FRAMEWORK_SIGNATURES and content:
+        for keyword,label in FRAMEWORK_SIGNATURES[filename].items():
+          if keyword in content:
+            detected.add(label)
 
-      if file == "package.json":
-        with open(file_path, "r", encoding="utf-8") as f:
-          content = f.read().lower()
-          if "react" in content:
-            framework.append("React")
-
-      if file == "pom.xml":
-        with open(file_path, "r", encoding="utf-8") as f:
-          content = f.read().lower()
-          if "spring" in content:
-            framework.append("Spring")
-
-    
-  return list(set(framework))
+return sorted(detected)
