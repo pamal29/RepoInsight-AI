@@ -1,16 +1,12 @@
-import os 
+def detect_architecture(files):
+  paths = [file.get("path", "").lower() for file in files]
 
-def detect_architecture(repo_path):
   folders = set()
 
-  for root, dirs , files in os.walk(repo_path):
-    for dir_name in dirs:
-      folders.add(dir_name.lower())
+  for path in paths:
+    parts = path.split("/")
+    for part in parts[:-1]:
+      folders.add(part)
 
-  if {"models", "views", "controllers"}.issubset(folders):
-    return "MVC"
-
-  if "services" in folders:
-    return "Microservices"
-
-  return "Monolithic or Unknown"
+  filenames = {path.split("/")[-1] for path in paths}
+  
