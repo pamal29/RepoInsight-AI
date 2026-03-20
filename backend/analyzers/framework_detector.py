@@ -68,4 +68,4 @@ def detect_framework(files):
           if keyword in content:
             detected.add(label)
 
-return sorted(detected)
+    return sorted(detected)

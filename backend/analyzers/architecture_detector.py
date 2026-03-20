@@ -10,12 +10,12 @@ def detect_architecture(files):
 
   filenames = {path.split("/")[-1] for path in paths}
   
-if {"controllers", "services", "repositories", "models"}.issubset(folders):
-  return{
-    "pattern":"clean/ Layered Architecture",
-    "confident":"High",
-    "description":"Separation of concerns with controllers, services, repositories, and models"
-  }
+  if {"controllers", "services", "repositories", "models"}.issubset(folders):
+    return{
+      "pattern":"clean/ Layered Architecture",
+      "confident":"High",
+      "description":"Separation of concerns with controllers, services, repositories, and models"
+    }
 
   if{"models","views","controllers"}.issubset(folders):
     return{

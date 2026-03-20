@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 from github_api.fetcher import get_repo_contents
 from utils.file_filter import filter_files
 from analyzers.language_detector import detect_language
