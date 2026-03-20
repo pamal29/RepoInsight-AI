@@ -42,30 +42,4 @@ if {"controllers", "services", "repositories", "models"}.issubset(folders):
       "description": "Multiple indipendent sevice modules detected"
     }
 
-  if {"functions", "handlers", "lambdas"}.intersection(folders):
-    return{
-      "pattern": "Serverless / Function",
-      "confidence": "Medium",
-      "description": "Function-based structure typical of serverless deployments"
-    }
-
-  if {"notebooks", "data", "models"}.issubset(folders) or any(p.endswith(".ipynb") for p in paths):
-        return {
-            "pattern": "Data Science / ML Project",
-            "confidence": "Medium",
-            "description": "Notebook and data-centric structure typical of ML projects."
-        }
- 
-  has_subdirs= any("/" in path for path in paths)
-  if not has_subdirs:
-    return{
-      "pattern": "Flat / Script-based",
-      "confidence": "High",
-      "description": "No subdirectory structure — likely a simple script or utility project."
-    }
-
-  return{
-    "pattern": "Monolithic",
-    "confidence": "Low",
-    "description": "Could not detect a specific pattern. Likely a monolithic or custom structure."
-  }
+  
