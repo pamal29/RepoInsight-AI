@@ -82,3 +82,36 @@ def score_readme(files: list) -> dict:
         "feedback_fail": "No tech stack section found."
     },
   }
+
+  score = 0
+  feedback_fail = []
+  check_result ={}
+
+  for key, check in checks.items():
+    passed = check["passed"]
+    check_result[key] = passed
+    if passed: 
+      score += check["weight"]
+    else:
+      feedback_fail.append(check["feedback_fail"])
+
+  if score >= 90:
+    grade = "A+"
+  elif score >= 80:
+    grade = "A"
+  elif score >= 70:
+    grade = "B"
+  elif score >= 60:
+    grade = "C"
+  elif score >= 40:
+    grade = "D"
+  else:
+    grade = "F"
+
+  return{
+    "score": score,
+    "grade": grade,
+    "found": True,
+    "feedback": feedback_fail,
+    "checks": check_result
+  } 
