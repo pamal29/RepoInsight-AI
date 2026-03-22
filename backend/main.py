@@ -7,6 +7,7 @@ from analyzers.framework_detector import detect_framework
 from analyzers.complexity_analyzer import calculate_complexity
 from analyzers.architecture_detector import detect_architecture
 from fastapi.middleware.cors import CORSMiddleware
+from analyzers.readme_scorer import score_readme
 
 
 app = FastAPI(
@@ -33,16 +34,18 @@ def root():
 @app.post("/analyze")
 def analyze_repo(request : AnalyzeRequest):
   try:
-
     files = get_repo_contents(request.repo_url)
+  
   except Exception as e:
     raise HTTPException(status_code=400, detail="Error fetching repository contents")
 
+  
   if not files:
     raise HTTPException(status_code=400, detail="No files to analyze")
 
   filtered_files = filter_files(files)
 
+  
   if not filtered_files:
     raise HTTPException(status_code=400, detail="No analyzable files found after filtering")
 
@@ -50,6 +53,7 @@ def analyze_repo(request : AnalyzeRequest):
   frameworks = detect_framework(filtered_files)
   complexity = calculate_complexity(filtered_files)
   architecture = detect_architecture(filtered_files)
+  readme_score = score_readme(filtered_files)
 
 
   return {
@@ -59,6 +63,7 @@ def analyze_repo(request : AnalyzeRequest):
         "frameworks": frameworks,
         "complexity": complexity,
         "architecture": architecture,
+        "readme_score": readme_score,
   }
 
 
