@@ -25,13 +25,35 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+GITHUB_REPO_PATTERN = re.compile(
+    r"^https?://github\.com/[\w.-]+/[\w.-]+/?$"
+)
+
 class AnalyzeRequest(BaseModel):
   repo_url:str
+
+  @field_validator("repo_url")
+  @classmethod
+  def validate_repo_url(cls, v: str) -> str:
+      if not GITHUB_REPO_PATTERN.match(v.strip()):
+          raise ValueError(
+              "repo_url must look like https://github.com/<owner>/<repo>"
+          )
+      return v.strip()
+
+class AnalyzeResponse(BaseModel):
+    repo_url: str
+    total_files: int
+    language_info: dict
+    frameworks: dict
+    complexity: dict
+    architecture: dict
+    readme_score: dict
 
 @app.get("/")
 def root():
