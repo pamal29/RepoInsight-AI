@@ -1,14 +1,20 @@
+import logging
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
+from fastapi.middleware.cors import CORSMiddleware
+
 from github_api.fetcher import get_repo_contents
 from utils.file_filter import filter_files
 from analyzers.language_detector import detect_language
 from analyzers.framework_detector import detect_framework
 from analyzers.complexity_analyzer import calculate_complexity
 from analyzers.architecture_detector import detect_architecture
-from fastapi.middleware.cors import CORSMiddleware
 from analyzers.readme_scorer import score_readme
 
+import re
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("repoinsight")
 
 app = FastAPI(
   title="RepoInsight AI",
